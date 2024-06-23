@@ -4,6 +4,7 @@ import "./globals.css";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import dynamic from 'next/dynamic';
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 const DynamicAntdLayout = dynamic(() => import('./components/defaultLayout'), { ssr: false });

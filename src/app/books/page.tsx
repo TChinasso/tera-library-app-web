@@ -5,9 +5,12 @@ import { useEffect, useState } from 'react'
 import { Button, Card, Dropdown, Input, MenuProps, Pagination, Space, Typography } from 'antd';
 import type { SearchProps } from 'antd/es/input/Search';
 import { HeartOutlined } from '@ant-design/icons';
-const { Meta } = Card;
 const { Search } = Input;
+
+
+
 export default function Page() {
+
   const router = useRouter()
   const searchParams = useSearchParams()
   const [data, setData] = useState<Book[]>([])

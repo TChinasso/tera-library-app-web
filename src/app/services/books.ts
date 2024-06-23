@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import instance from "./axios"
+import instance from "../lib/axios"
 
 export default {
   async getBooks(searchParams?: any) {
@@ -7,6 +7,9 @@ export default {
   },
   async getBookById(id: any){
     return await instance.get<Book>(`/books/${id}`)
+  },
+  async deleteBook(id: any){
+    return await instance.delete<Book>(`/books/${id}`)
   }
 }
 

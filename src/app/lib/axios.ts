@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
 const instance: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:3001', // Your API base URL
+  baseURL: process.env.NEXT_PUBLIC_API_URL, // Your API base URL
   timeout: 1000,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -23,6 +23,5 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-console.log(process.env, instance)
 
 export default instance;

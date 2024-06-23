@@ -8,13 +8,14 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 
 export default function Page({ params }: { params: { id: string } }) {
-  const [book, setBook] = useState<Book | any>()
+  const [book, setBook] = useState<Book | null>(null)
   const [form] = Form.useForm();
   const { id } = params;
 
-  const deleteBook = async() => {
+  const deleteBook = async(book: Book | null) => {
+    if (!book) return
     try{
-      const response = await booksService.deleteBook(book._id)
+      const response = await booksService.deleteBook(book?._id)
     } catch (error) {
       console.error(error)
     }
@@ -86,7 +87,7 @@ export default function Page({ params }: { params: { id: string } }) {
             Deletar
           </Button>
           <Button type="primary" htmlType="submit">
-            {book._id ? 'Atualizar' : 'Adicionar'}
+            {book?._id ? 'Atualizar' : 'Adicionar'}
           </Button>
         </div>
       </Form>

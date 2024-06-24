@@ -19,7 +19,7 @@ export default function Page() {
   let order = 'name'
   const [totalItems, setTotalItems] = useState(0)
   const [limit, setLimit] = useState(10)
-  if(searchParams.get('page')){
+  if (searchParams.get('page')) {
     page = searchParams.get('page') ?? '1'
   }
   const fetchBooks = async (searchParams?: any) => {
@@ -35,7 +35,7 @@ export default function Page() {
       const books = data.data
       books.forEach((book: Book, index) => {
         const isliked = isLikedBook(book)
-        if (isliked){
+        if (isliked) {
           books[index].users_who_liked.push('me')
         }
       })
@@ -114,15 +114,15 @@ export default function Page() {
   const handleLikeChange = (liked: Boolean, event: MouseEvent, book: Book) => {
     event.preventDefault()
     event.stopPropagation()
-    if(!localStorage.getItem('likedBooks')) {
+    if (!localStorage.getItem('likedBooks')) {
       localStorage.setItem('likedBooks', '')
     }
     let likedBooks: any = localStorage.getItem('likedBooks')
     likedBooks = likedBooks?.split(',')
-    if (liked){
+    if (liked) {
       likedBooks.push(book._id)
       data.forEach((item: Book, index) => {
-        if(item._id == book._id){
+        if (item._id == book._id) {
           data[index].users_who_liked.push('me')
           console.log(data[index].users_who_liked)
         }
@@ -132,7 +132,7 @@ export default function Page() {
       const index = likedBooks.indexOf(book._id)
       likedBooks.splice(index, 1)
       data.forEach((item: Book, index) => {
-        if(item._id == book._id){
+        if (item._id == book._id) {
           data[index].users_who_liked.splice(0, 1)
         }
       })
@@ -144,7 +144,7 @@ export default function Page() {
   }
   const isLikedBook = (book: Book): boolean => {
     let likedBooks: any = localStorage.getItem('likedBooks')
-    if(!likedBooks) return false
+    if (!likedBooks) return false
     likedBooks = likedBooks?.split(',')
     return likedBooks.some((bookId: string) => {
       return bookId === book._id
@@ -152,7 +152,7 @@ export default function Page() {
   }
   return (
     <div className='container flex-col flex items-center' style={{ height: '100%' }}>
-      <div className='flex items-center justify-between px-2' style={{width: '100%'}}>
+      <div className='flex items-center justify-between px-2' style={{ width: '100%' }}>
         <Search className='my-6 self-start mr-4' placeholder="Procure uum livro, autor ou categoria" onSearch={onSearch} style={{ width: 400 }} />
         <Dropdown
           menu={{
@@ -175,14 +175,19 @@ export default function Page() {
                 style={{ width: 240, height: 340 }}
                 cover={<img alt="example" style={{ height: 200 }} src={book.cover_picture} />}
               >
-                <div className="title"><h2>{book.name}</h2></div>
-                <div className="flex justify-between">
-                  <div className="col flex flex-col">
-                    <span>{book.author}</span>
-                    <span>{book.category}</span>
+                <div className="flex justify-between items-center">
+                  <div className="title"><h2>{book.name}</h2>
+                    <div className="col flex flex-col">
+                      <span>{book.author}</span>
+                      <span>{book.category}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between">
+
+
                   </div>
                   <div className="col">
-                    <LikeButton handleLikeChange={handleLikeChange} book={book} isLiked={isLikedBook(book)}/>
+                    <LikeButton handleLikeChange={handleLikeChange} book={book} isLiked={isLikedBook(book)} />
                   </div>
                 </div>
               </Card>

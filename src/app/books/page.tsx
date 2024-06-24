@@ -2,7 +2,7 @@
 import booksService, { Book } from '@/services/books'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Button, Card, Dropdown, Input, MenuProps, Pagination } from 'antd';
+import { Button, Card, Dropdown, Input, MenuProps, Pagination, Spin } from 'antd';
 import type { SearchProps } from 'antd/es/input/Search';
 const { Search } = Input;
 import LikeButton from '../../components/likeButton/main';
@@ -18,11 +18,13 @@ export default function Page() {
   let order = 'name'
   const [totalItems, setTotalItems] = useState(0)
   const [limit, setLimit] = useState(10)
+  const [loadingBooks, setLoadingBooks] = useState(false)
   if (searchParams.get('page')) {
     page = searchParams.get('page') ?? '1'
   }
   const fetchBooks = async (searchParams?: any) => {
     try {
+      setLoadingBooks(true)
       const payload = {
         order: order,
         page: page,
@@ -46,6 +48,7 @@ export default function Page() {
       console.error(error)
     } finally {
       updateQueryParams()
+      setLoadingBooks(false)
     }
   }
   useEffect(() => {
@@ -163,34 +166,52 @@ export default function Page() {
       </div>
       <div className='grow'>
         <div className="flex flex-wrap justify-center items-start gap-6">
-          {data.length == 0 ? <h1 style={{fontSize: 22, fontWeight: 800, marginTop: 32}}>Nenhum livro encontrado</h1> : ''}
-          {data?.map((book, index) => (
-            <div key={book._id}
-              onClick={() => gotoBookPage(book)}
-            >
-              <Card
-                hoverable
-                style={{ width: 240, height: 340 }}
-                cover={<img alt="example" style={{ height: 200 }} src={book.cover_picture} />}
-              >
-                <div className="flex justify-between items-center">
-                  <div className="title"><h2 style={{fontSize: 14, fontWeight: 800}}>{book.name}</h2>
-                    <div className="col flex flex-col">
-                      <span style={{fontSize: 12, fontWeight: 400}}>{book.author}</span>
-                      <span style={{fontSize: 12, fontWeight: 400}}>{book.category}</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-
-
-                  </div>
-                  <div className="col">
-                    <LikeButton handleLikeChange={handleLikeChange} book={book} isLiked={isLikedBook(book)} />
-                  </div>
+          {(() => {
+            if (loadingBooks) {
+              return (
+                <div className='my-10'>
+                  <Spin tip="Loading" size="large">
+                </Spin>
                 </div>
-              </Card>
-            </div>
-          ))}
+              )
+            } else if (data.length == 0 && !loadingBooks) {
+              return (
+                <h1 style={{ fontSize: 22, fontWeight: 800, marginTop: 32 }}>Nenhum livro encontrado</h1>
+              )
+            } else {
+              return (
+                <div className="flex flex-wrap justify-center items-start gap-6">{data?.map((book, index) => (
+                  <div key={book._id}
+                    onClick={() => gotoBookPage(book)}
+                  >
+                    <Card
+                      hoverable
+                      style={{ width: 240, height: 340 }}
+                      cover={<img alt="example" style={{ height: 200 }} src={book.cover_picture} />}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div className="title"><h2 style={{ fontSize: 14, fontWeight: 800 }}>{book.name}</h2>
+                          <div className="col flex flex-col">
+                            <span style={{ fontSize: 12, fontWeight: 400 }}>{book.author}</span>
+                            <span style={{ fontSize: 12, fontWeight: 400 }}>{book.category}</span>
+                          </div>
+                        </div>
+                        <div className="flex justify-between">
+
+
+                        </div>
+                        <div className="col">
+                          <LikeButton handleLikeChange={handleLikeChange} book={book} isLiked={isLikedBook(book)} />
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                ))}</div>
+              )
+            }
+          })()}
+
+
         </div>
       </div>
       <div className='my-6 pb-6'>

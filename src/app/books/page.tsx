@@ -2,9 +2,8 @@
 import booksService, { Book } from '@/services/books'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Button, Card, Dropdown, Input, MenuProps, Pagination, Space, Typography } from 'antd';
+import { Button, Card, Dropdown, Input, MenuProps, Pagination } from 'antd';
 import type { SearchProps } from 'antd/es/input/Search';
-import { HeartOutlined } from '@ant-design/icons';
 const { Search } = Input;
 import LikeButton from '../../components/likeButton/main';
 

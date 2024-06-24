@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Popconfirm, message } from 'antd';
 import booksService, { Book } from '@/services/books'
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
 
@@ -18,7 +18,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const deleteBook = async (book: Book | null) => {
     if (!book) return
     try {
-      const response = await booksService.deleteBook(book?._id)
+      await booksService.deleteBook(book?._id)
       message.success('Book deleted successfuly')
       router.replace('/books')
     } catch (error) {

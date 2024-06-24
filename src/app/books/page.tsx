@@ -102,7 +102,6 @@ export default function Page() {
         const myLikedBooks = data.filter(book => {
           return isLikedBook(book)
         })
-        console.log(myLikedBooks)
         setData(myLikedBooks)
       }
     },
@@ -123,7 +122,6 @@ export default function Page() {
       data.forEach((item: Book, index) => {
         if (item._id == book._id) {
           data[index].users_who_liked.push('me')
-          console.log(data[index].users_who_liked)
         }
       })
       setData(data)

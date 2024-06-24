@@ -28,6 +28,7 @@ export default function Page({ params }: { params: { id: string } }) {
   }
   useEffect(() => {
     const getBookById = async () => {
+      if (id === 'new') return
       try {
         const response = await booksService.getBookById(params.id)
         setBook(response.data)
@@ -68,8 +69,25 @@ export default function Page({ params }: { params: { id: string } }) {
       setLoadingUpdate(false)
     }
   }
+  const createBook = async (payload: any) => {
+    try {
+      setLoadingUpdate(true)
+      const response = await booksService.createBook({...payload })
+      message.success('Book created successfuly')
+      router.replace('/books')
+    } catch (error) {
+      message.error('Failed on book creating.')
+      console.error(error)
+    } finally {
+      setLoadingUpdate(false)
+    }
+  }
   const onFinish = async (values: any) => {
-    await updateBook(values)
+    if (book?._id) {
+      await updateBook(values)
+    } else {
+      await createBook(values)
+    }
   };
 
   return (

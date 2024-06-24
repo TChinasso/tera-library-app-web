@@ -14,6 +14,9 @@ export default {
   async updateBook(payload: any){
     return await instance.put<Book>(`/books/${payload._id}`, payload)
   },
+  async createBook(payload: any){
+    return await instance.post<Book>(`/books`, payload)
+  },
 }
 
 

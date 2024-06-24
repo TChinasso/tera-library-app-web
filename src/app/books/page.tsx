@@ -166,6 +166,7 @@ export default function Page() {
       </div>
       <div className='grow'>
         <div className="flex flex-wrap justify-center items-start gap-6">
+          {data.length == 0 ? <h1 style={{fontSize: 22, fontWeight: 800, marginTop: 32}}>Nenhum livro encontrado</h1> : ''}
           {data?.map((book, index) => (
             <div key={book._id}
               onClick={() => gotoBookPage(book)}
@@ -176,10 +177,10 @@ export default function Page() {
                 cover={<img alt="example" style={{ height: 200 }} src={book.cover_picture} />}
               >
                 <div className="flex justify-between items-center">
-                  <div className="title"><h2>{book.name}</h2>
+                  <div className="title"><h2 style={{fontSize: 14, fontWeight: 800}}>{book.name}</h2>
                     <div className="col flex flex-col">
-                      <span>{book.author}</span>
-                      <span>{book.category}</span>
+                      <span style={{fontSize: 12, fontWeight: 400}}>{book.author}</span>
+                      <span style={{fontSize: 12, fontWeight: 400}}>{book.category}</span>
                     </div>
                   </div>
                   <div className="flex justify-between">

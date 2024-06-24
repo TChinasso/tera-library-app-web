@@ -25,7 +25,7 @@ const LikeButton: FC<LikeButtonProps> = ({ handleLikeChange, isLiked, book }) =>
   if (isDarkMode) {
     return (
       <Tooltip title="like">
-        <Button shape="circle" icon={<HeartFilled style={{ color: liked ? '#FF0000' : 'white' }} className={`like-button ${animateLike ? 'liked' : ''}`} onClick={(event) => { handleLike(event) }} />} />
+        <Button shape="circle" type='text' icon={<HeartFilled style={{ color: liked ? '#FF0000' : 'white' }} className={`like-button ${animateLike ? 'liked' : ''}`} onClick={(event) => { handleLike(event) }} />} />
       </Tooltip>
     );
   } else {

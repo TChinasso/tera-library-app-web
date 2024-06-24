@@ -1,0 +1,20 @@
+.like-button {
+  transition: all 0.3s;
+}
+
+.like-button.liked {
+  animation: scaleAnimation 0.6s ease-in-out;
+  color: red;
+}
+
+@keyframes scaleAnimation {
+  0% {
+    transform: scale(1); /* Normal scale */
+  }
+  50% {
+    transform: scale(1.5); /* Increased scale */
+  }
+  100% {
+    transform: scale(1); /* Back to normal scale */
+  }
+}

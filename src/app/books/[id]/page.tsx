@@ -1,22 +1,28 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, InputNumber } from 'antd';
-import booksService, { Book } from '@/app/services/books'
+import { Button, Form, Input, InputNumber, Popconfirm, message } from 'antd';
+import booksService, { Book } from '@/services/books'
 import { useRouter, useSearchParams } from 'next/navigation';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 
 
 
 export default function Page({ params }: { params: { id: string } }) {
   const [book, setBook] = useState<Book | null>(null)
+  const [loadingUpdate, setLoadingUpdate] = useState(false)
   const [form] = Form.useForm();
   const { id } = params;
+  const router = useRouter()
 
-  const deleteBook = async(book: Book | null) => {
+  const deleteBook = async (book: Book | null) => {
     if (!book) return
-    try{
+    try {
       const response = await booksService.deleteBook(book?._id)
+      message.success('Book deleted successfuly')
+      router.replace('/books')
     } catch (error) {
+      message.error('Failed on book deleting.')
       console.error(error)
     }
   }
@@ -49,25 +55,39 @@ export default function Page({ params }: { params: { id: string } }) {
     },
   };
   /* eslint-enable no-template-curly-in-string */
-
-  const onFinish = (values: any) => {
-    console.log(values);
+  const updateBook = async (payload: any) => {
+    try {
+      setLoadingUpdate(true)
+      const response = await booksService.updateBook({ ...book, ...payload })
+      message.success('Book updated successfuly')
+      router.replace('/books')
+    } catch (error) {
+      message.error('Failed on book updating.')
+      console.error(error)
+    } finally {
+      setLoadingUpdate(false)
+    }
+  }
+  const onFinish = async (values: any) => {
+    await updateBook(values)
   };
 
   return (
-    <div>
+    <div className='container flex items-center flex-col px-6 py-6'>
+      <div className='self-start my-4'><Button onClick={() => router.back()} type='text'><ArrowLeftOutlined />Voltar</Button></div>
       <Form
         layout='vertical'
         name="nest-messages"
         onFinish={onFinish}
-        style={{ maxWidth: 600 }}
+        style={{ maxWidth: 600, width: '100%' }}
         validateMessages={validateMessages}
         form={form}
+        className='col-span-12'
       >
         <Form.Item name='name' label="Nome" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name='author' label="Autor" rules={[{ type: 'email' }]}>
+        <Form.Item name='author' label="Autor" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
         <Form.Item name='cover_picture' label="Foto de capa">
@@ -79,14 +99,21 @@ export default function Page({ params }: { params: { id: string } }) {
         <Form.Item name='stock' label="Quantidade em estoque">
           <InputNumber />
         </Form.Item>
-        <Form.Item name='description' label="Descriçao" rules={[{ type: 'number', min: 0, max: 99 }]}>
+        <Form.Item name='description' label="Descriçao">
           <Input.TextArea rows={10} />
         </Form.Item>
         <div className='flex justify-between'>
-          <Button type="primary" danger onClick={() => deleteBook(book)}>
-            Deletar
-          </Button>
-          <Button type="primary" htmlType="submit">
+          <Popconfirm
+            title="Delete the book"
+            description="Are you sure to delete this book?"
+            onConfirm={() => deleteBook(book)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger>Delete</Button>
+          </Popconfirm>
+
+          <Button disabled={loadingUpdate} type="primary" htmlType="submit">
             {book?._id ? 'Atualizar' : 'Adicionar'}
           </Button>
         </div>

@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 
 const inter = Inter({ subsets: ["latin"] });
 
-const DynamicAntdLayout = dynamic(() => import('./components/defaultLayout'), { ssr: false });
+const DynamicAntdLayout = dynamic(() => import('../components/defaultLayout'), { ssr: false });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} style={{ height: '100%' , overflow: 'auto' }}>
         <AntdRegistry>
           <DynamicAntdLayout>
             {children}

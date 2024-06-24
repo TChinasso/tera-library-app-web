@@ -10,7 +10,10 @@ export default {
   },
   async deleteBook(id: any){
     return await instance.delete<Book>(`/books/${id}`)
-  }
+  },
+  async updateBook(payload: any){
+    return await instance.put<Book>(`/books/${payload._id}`, payload)
+  },
 }
 
 
@@ -29,5 +32,5 @@ export interface Book {
   category: string;
   stock: string;
   users_who_liked: string[];
-  _id: number
+  _id: string
 }
